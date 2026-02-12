@@ -1,5 +1,5 @@
 import argparse
-import sys
+
 
 def get_codec(data_type, is_monotonic):
     """
@@ -15,7 +15,7 @@ def get_codec(data_type, is_monotonic):
             return "CODEC(DoubleDelta, ZSTD(1))"
         # Gorilla is best for monotonic floats (rare, but possible)
         if 'float' in dt:
-             return "CODEC(Gorilla, ZSTD(1))"
+            return "CODEC(Gorilla, ZSTD(1))"
 
     # --- 2. Time/Date (General / Random order) ---
     # Delta is good for reducing the magnitude of values relative to each other
@@ -28,9 +28,9 @@ def get_codec(data_type, is_monotonic):
         return "CODEC(Gorilla, ZSTD(1))"
 
     # --- 4. Integers (General / Random) ---
-    # T64 is an option, but ZSTD is generally safer and more balanced.
+    # T64 is an option, but Delta + ZSTD is generally safer and more balanced for general integers.
     if 'int' in dt:
-        return "CODEC(ZSTD(1))"
+        return "CODEC(Delta, ZSTD(1))"
 
     # --- 5. Strings / FixedStrings ---
     # LowCardinality is a data type, not a codec, but if the underlying type is String:

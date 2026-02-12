@@ -30,7 +30,7 @@ Never create an "Implicit" Materialized View (where the storage table is hidden)
 
 ### 3. Query Optimization
 * **Never query the MV directly.** Always query the **Target Table**.
-* **Force Final Aggregation:** Even with MVs, ClickHouse may store data in multiple parts. You must wrap your final select in a `GROUP BY` to merge the partial results from the target table.
+* **Final aggregation strategy:** Even with MVs, ClickHouse may store data in multiple parts. You typically should wrap your final select in a `GROUP BY` to merge partial results from the target table. In engines that support it, you can also use `FINAL` for correctness-critical queries, at the cost of additional compute.
 
 ## Example Scenarios
 
